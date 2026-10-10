@@ -424,5 +424,11 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
+# Never commit these
+*.secret
+*.pfx
+reports/raw/
+.env
+
 # Official VS Code C# Dev Kit Extension exclusion
 #*.lscache
