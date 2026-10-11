@@ -1,0 +1,26 @@
+FirstName,LastName,Department,JobTitle,EmployeeType,Manager
+Dana,Whitfield,Executive,Chief Executive Officer,Employee,
+Marcus,Chen,Executive,Chief Financial Officer,Employee,dana.whitfield
+Priya,Nair,HR,HR Manager,Employee,dana.whitfield
+Tom,Becker,HR,HR Specialist,Employee,priya.nair
+Alicia,Grant,HR,Recruiter,Employee,priya.nair
+Kevin,Ortiz,HR,HR Coordinator,Employee,priya.nair
+Laura,Kim,Finance,Finance Manager,Employee,marcus.chen
+Ben,Adler,Finance,Accountant,Employee,laura.kim
+Sofia,Reyes,Finance,Accountant,Employee,laura.kim
+Nate,Collins,Finance,Payroll Specialist,Employee,laura.kim
+Hannah,Scott,Finance,Financial Analyst,Employee,laura.kim
+Raj,Patel,IT,IT Manager,Employee,dana.whitfield
+Emily,Stone,IT,Systems Administrator,Employee,raj.patel
+Jordan,Lee,IT,Help Desk Technician,Employee,raj.patel
+Chris,Moreno,IT,Help Desk Technician,Employee,raj.patel
+Taylor,Brooks,IT,IT Intern,Intern,raj.patel
+Sam,Rivera,IT,Network Consultant,Contractor,raj.patel
+Mia,Johnson,Sales,Sales Director,Employee,dana.whitfield
+Ethan,Wright,Sales,Account Executive,Employee,mia.johnson
+Olivia,Davis,Sales,Account Executive,Employee,mia.johnson
+Lucas,Hall,Sales,Account Executive,Employee,mia.johnson
+Ava,Turner,Sales,Sales Development Rep,Employee,mia.johnson
+Noah,Price,Sales,Sales Development Rep,Employee,mia.johnson
+Grace,Liu,Sales,Sales Operations Analyst,Employee,mia.johnson
+Jamie,Fox,Marketing,Marketing Consultant,Contractor,mia.johnson

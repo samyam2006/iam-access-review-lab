@@ -1,0 +1,29 @@
+"DisplayName","UserPrincipalName","Department","JobTitle","EmployeeType","AccountEnabled","Groups","GlobalAdmin","LastSignIn"
+"Alicia Grant","alicia.grant@samyamlab.onmicrosoft.com","HR","Recruiter","Employee","True","APP-Payroll; SG-HR","False",
+"Ava Turner","ava.turner@samyamlab.onmicrosoft.com","Sales","Sales Development Rep","Employee","True","APP-CRM; SG-Sales","False",
+"Ben Adler","ben.adler@samyamlab.onmicrosoft.com","Finance","Accountant","Employee","True","SG-Finance; APP-Payroll","False",
+"Chris Moreno","chris.moreno@samyamlab.onmicrosoft.com","IT","Help Desk Technician","Employee","True","APP-ITAdminTools; SG-IT","False",
+"Dana Whitfield","dana.whitfield@samyamlab.onmicrosoft.com","Executive","Chief Executive Officer","Employee","True","SG-Executive; APP-CRM","False","10/10/2026 6:52:01 PM"
+"Emily Stone","emily.stone@samyamlab.onmicrosoft.com","IT","Systems Administrator","Employee","True","APP-ITAdminTools; SG-IT","True",
+"Ethan Wright","ethan.wright@samyamlab.onmicrosoft.com","Sales","Account Executive","Employee","True","APP-CRM; SG-Sales","False",
+"Front Desk","frontdesk@samyamlab.onmicrosoft.com",,,,"True","","False",
+"Grace Liu","grace.liu@samyamlab.onmicrosoft.com","Sales","Sales Operations Analyst","Employee","True","APP-CRM; SG-Sales","False",
+"Hannah Scott","hannah.scott@samyamlab.onmicrosoft.com","Sales","Sales Operations Analyst","Employee","True","SG-Finance; APP-Payroll; SG-Sales","False",
+"Jamie Fox","jamie.fox@samyamlab.onmicrosoft.com","Marketing","Marketing Consultant","Contractor","True","SG-Marketing","False",
+"Jordan Lee","jordan.lee@samyamlab.onmicrosoft.com","IT","Help Desk Technician","Employee","True","APP-ITAdminTools; SG-IT","True",
+"Kevin Ortiz","kevin.ortiz@samyamlab.onmicrosoft.com","HR","HR Coordinator","Employee","True","APP-Payroll; SG-HR","False",
+"Lab Admin","labadmin@samyamlab.onmicrosoft.com",,,,"True","","True","10/10/2026 7:14:15 PM"
+"Laura Kim","laura.kim@samyamlab.onmicrosoft.com","Finance","Finance Manager","Employee","True","SG-Finance; APP-Payroll","False",
+"Lucas Hall","lucas.hall@samyamlab.onmicrosoft.com","Sales","Account Executive","Employee","False","APP-CRM; SG-Sales","False",
+"Marcus Chen","marcus.chen@samyamlab.onmicrosoft.com","Executive","Chief Financial Officer","Employee","True","SG-Executive; APP-CRM","False",
+"Mia Johnson","mia.johnson@samyamlab.onmicrosoft.com","Sales","Sales Director","Employee","True","APP-CRM; SG-Sales","False","10/10/2026 6:50:35 PM"
+"Nate Collins","nate.collins@samyamlab.onmicrosoft.com","Finance","Payroll Specialist","Employee","True","SG-Finance; APP-Payroll","False",
+"Noah Price","noah.price@samyamlab.onmicrosoft.com","Sales","Sales Development Rep","Employee","True","APP-CRM; SG-Sales","False",
+"Olivia Davis","olivia.davis@samyamlab.onmicrosoft.com","Sales","Account Executive","Employee","True","APP-CRM; SG-Sales","False",
+"Priya Nair","priya.nair@samyamlab.onmicrosoft.com","HR","HR Manager","Employee","True","APP-Payroll; SG-HR","False","10/10/2026 6:49:03 PM"
+"Raj Patel","raj.patel@samyamlab.onmicrosoft.com","IT","IT Manager","Employee","True","APP-ITAdminTools; SG-IT","True","10/10/2026 6:53:07 PM"
+"Sam Rivera","sam.rivera@samyamlab.onmicrosoft.com","IT","Network Consultant","Contractor","True","SG-IT; APP-Payroll","False",
+"Sofia Reyes","sofia.reyes@samyamlab.onmicrosoft.com","Finance","Accountant","Employee","True","SG-Finance; APP-Payroll","False",
+"Samyam Shrestha","school-account#EXT#",,,,"True","","True","10/10/2026 6:20:35 PM"
+"Taylor Brooks","taylor.brooks@samyamlab.onmicrosoft.com","IT","IT Intern","Intern","True","APP-ITAdminTools; SG-IT","True",
+"Tom Becker","tom.becker@samyamlab.onmicrosoft.com","HR","HR Specialist","Employee","True","APP-Payroll; SG-HR","False",
