@@ -82,3 +82,20 @@ iam-access-review-lab/
 - Replace the AD service account with a group managed service account (gMSA), which rotates its own password.
 - Sync AD to Entra ID with Entra Connect to manage identities in one place.
 - Run the access review on a schedule and alert on new Critical findings.
+
+## Screenshots
+
+**Access review findings, before:** 3 Critical, 27 High
+![Findings before](screenshots/01-findings-before.png)
+
+**Access review findings, after:** 0 Critical
+![Findings after](screenshots/02-findings-after.png)
+
+**Global Admin is now just-in-time through PIM**
+![PIM eligible assignments](screenshots/03-pim-eligible.png)
+
+**Conditional Access: MFA required, legacy auth blocked**
+![Conditional Access policies](screenshots/04-conditional-access.png)
+
+**Hidden Domain Admin found through a nested group**
+![AD hidden admin](screenshots/05-ad-hidden-admin.png)
