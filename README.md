@@ -1,101 +1,83 @@
 # IAM Access Review Lab
 
-I built a 25-person fake company in **Microsoft Entra ID** and **Active Directory**, planted 8 common access problems, wrote PowerShell scripts to find them, and fixed every one. The goal was to practice the core work of an IAM or GRC analyst: access reviews, least privilege, joiner/mover/leaver controls, and documenting it for auditors.
+I wanted to learn what an IAM analyst actually does day to day, so I built a fake company in Microsoft Entra ID and Active Directory, broke its access on purpose, then wrote scripts to find the problems and fixed them.
 
-**Tools:** Microsoft Entra ID (P2 trial), Active Directory on Windows Server 2022 (Azure VM), PowerShell 7, Microsoft Graph, Privileged Identity Management, Conditional Access, Access Reviews
+I used Claude to help me write the scripts. I set everything up, ran it all, and fixed things when they broke (a lot broke).
 
-## Results
+## What I did
+
+- Made a fake company called Contoso Lab with 25 employees in 6 departments
+- Messed up their access on purpose in 8 ways that happen in real companies
+- Wrote a PowerShell script that checks everyone's access and makes a report
+- Fixed everything the report found
+- Did the same thing in Active Directory on an Azure VM
+
+## The 8 problems I planted
+
+1. An IT intern had full admin rights
+2. A help desk tech had full admin rights when he only needs to reset passwords
+3. Too many people were full admins
+4. Someone who quit still had a working account
+5. Someone's account was turned off but they were still in groups
+6. Someone moved from Finance to Sales and kept their Finance and payroll access
+7. A contractor got added to payroll
+8. A shared "Front Desk" account with no owner and a password that never expires
+
+My script found all 8. It also found one I didn't plant: my school account was still a full admin in the tenant because I used it to set things up.
+
+## Before and after
 
 | | Before | After |
-| --- | --- | --- |
-| Critical findings (Entra ID) | 3 | **0** |
-| Permanent Global Administrators | 6 | **2** (named admin + break-glass) |
-| Leavers or movers with leftover access | 3 | **0** |
-| Users covered by an MFA policy | 0% | **100%** |
-| Domain Admins with risk flags (AD) | 4 | **0** |
-| AD minimum password length | 7 | **14** (16 for admins) |
-| AD account lockout | Never | **After 10 failed tries** |
+|---|---|---|
+| Critical findings | 3 | 0 |
+| Full admins | 6 | 2 |
+| People with leftover access | 3 | 0 |
+| MFA required | no one | everyone |
+| AD admins that shouldn't be | 4 | 0 |
+| AD password length | 7 | 14 |
+| AD account lockout | never | after 10 tries |
 
-## What I built
+## How I fixed it
 
-### 1. A fake company, created by script
-`scripts/entra/01-create-company.ps1` reads `data/users.csv` and creates 25 users across 6 departments, 9 security groups, and manager relationships in Entra ID. Access comes from department groups (`SG-*`) and app groups (`APP-*`), not one-off grants.
+- Took admin rights away from people who didn't need them
+- Set up PIM so the IT admins only get admin rights when they ask for it, for 4 hours max
+- Turned on MFA for everyone with Conditional Access
+- Made an emergency admin account in case I locked myself out
+- Set up a review every 3 months for who has payroll access
+- Wrote a simple policy for what happens when people join, move or leave
+- In AD, gave the help desk permission to reset passwords only, instead of full admin, and made the password policy stronger
 
-### 2. Eight planted problems
-`scripts/entra/02-plant-issues.ps1` creates the mistakes that show up in real audits:
+## Stuff that went wrong
 
-| # | Problem | Account |
-| --- | --- | --- |
-| 1 | IT intern with Global Administrator | taylor.brooks |
-| 2 | Help desk technician with Global Administrator | jordan.lee |
-| 3 | Too many permanent Global Administrators | (tenant) |
-| 4 | Employee left, account still enabled | ben.adler |
-| 5 | Account disabled, but group access left behind | lucas.hall |
-| 6 | Moved from Finance to Sales, kept Finance and payroll access | hannah.scott |
-| 7 | Contractor added to the payroll app | sam.rivera |
-| 8 | Shared account with no owner, password never expires | frontdesk |
+- My first script said it created all the users but it didn't create any. The module wasn't installed and the script just kept going. Now the scripts stop at the first error.
+- Installing the full Microsoft Graph module filled up my laptop. I only installed the parts I needed.
+- My own report had a false alarm. It said people were "still in groups" when they weren't. I had to fix the script and run it again.
+- In AD, one help desk guy was secretly a Domain Admin because he was in a group that was inside the admin group. You only see it if you check groups inside groups.
+- The default AD settings never locked accounts after wrong passwords, so someone could guess passwords forever. I didn't expect that one.
+- Also lots of Azure errors, a git merge conflict, and my school blocking me from parts of the portal.
 
-### 3. An access review script
-`scripts/entra/03-access-review.ps1` pulls users, groups, admin roles, MFA methods and sign-in history from Microsoft Graph, and checks them against 10 rules. It compares an HR termination list to enabled accounts, checks group membership against department, and flags admins whose job doesn't need admin rights. It writes a findings CSV sorted by severity and a full user inventory.
+## What's in here
 
-**It found all 8 planted problems, plus one I didn't plant:** the school account I used to create the tenant was still a Global Administrator, with no owner recorded. That's a real-world finding, an outside account with full control.
-
-See [`docs/findings-summary.md`](docs/findings-summary.md) for the full write-up and [`reports/`](reports/) for the before and after reports.
-
-### 4. Remediation
-- `scripts/entra/04-remediate.ps1` removed excess admin rights, disabled the leaver and revoked his sessions, stripped leftover group access, and disabled the shared account. It refuses to run unless a break-glass account exists, so the fix can't lock out the tenant.
-- **Privileged Identity Management:** the IT manager and sysadmin became *eligible* Global Admins, activated for up to 4 hours with MFA and a written reason.
-- **Conditional Access:** MFA required for all users, and legacy authentication blocked, with the break-glass account excluded. Tested in report-only mode with the What If tool before turning on.
-- **Access reviews:** quarterly review of the payroll group, with access removed automatically if reviewers don't respond.
-- **Policy:** a joiner/mover/leaver policy in [`docs/jml-policy.md`](docs/jml-policy.md).
-
-### 5. Active Directory
-On a Windows Server 2022 domain controller in Azure:
-- `scripts/ad/ad-01-build.ps1` built an OU structure and the same company, then planted classic AD mistakes, including a **hidden Domain Admin**: a help desk tech added through a nested `IT-Ops` group, so he never appears as a direct member.
-- `scripts/ad/ad-02-report.ps1` reports every member of 7 privileged groups **recursively**, which revealed the hidden admin, plus leavers and the password policy.
-- `scripts/ad/ad-03-remediate.ps1` removed excess admin rights, **delegated password reset only** to a help desk group instead of Domain Admin, fixed the service account, cleaned up leavers, and enforced a 14-character password policy with lockout. A fine-grained policy requires 16 characters for admins.
-- I tested the delegation: the help desk account could reset a user's password, but was denied when it tried to add itself to Domain Admins.
-
-## What went wrong (and what I learned)
-
-- **My script printed "Created" for users it never created.** The Graph module wasn't installed, so every command failed, but the script kept going. I added `#Requires` and `$ErrorActionPreference = "Stop"` to every script, so a failure now stops at the first error.
-- **The full Microsoft Graph module filled my disk.** I installed only the 6 sub-modules the project needs.
-- **False positives in my own review.** The after report flagged disabled accounts as "still in groups" with an empty group list, because PowerShell counted an empty value as one item. I fixed the filter and re-ran it. Validating the tool matters as much as the findings.
-- **Checking only direct group members misses admins.** The nested IT-Ops group hid a Domain Admin, and Domain Admins is itself nested in the built-in Administrators group. Recursive checks are essential.
-- **The weakest AD setting wasn't the obvious one.** The default policy had no account lockout at all, which allows unlimited password guessing, a bigger risk than the 7-character minimum.
-
-## Accepted residual risk
-The after report still lists fake users with no MFA registered and accounts that have never signed in. They never sign in, and Conditional Access requires MFA registration the first time they do. The break-glass account has no owner on purpose, and the shared account is disabled pending deletion under the 30-day policy.
-
-## Repo layout
-```
-iam-access-review-lab/
-├── data/            fake company and HR termination list
-├── scripts/entra/   create company, plant issues, access review, remediate
-├── scripts/ad/      AD build, privileged access report, remediate
-├── reports/         before and after findings (Entra ID and AD)
-├── docs/            findings summary, joiner/mover/leaver policy
-└── screenshots/
-```
-
-## Next steps
-- Replace the AD service account with a group managed service account (gMSA), which rotates its own password.
-- Sync AD to Entra ID with Entra Connect to manage identities in one place.
-- Run the access review on a schedule and alert on new Critical findings.
+- `data` - the fake employee list and who quit
+- `scripts/entra` - the Entra ID scripts
+- `scripts/ad` - the Active Directory scripts
+- `reports` - the before and after reports
+- `docs` - findings summary and the join/move/leave policy
+- `screenshots`
 
 ## Screenshots
 
-**Access review findings, before:** 3 Critical, 27 High
+Findings before
 ![Findings before](screenshots/01-findings-before.png)
 
-**Access review findings, after:** 0 Critical
+Findings after
 ![Findings after](screenshots/02-findings-after.png)
 
-**Global Admin is now just-in-time through PIM**
-![PIM eligible assignments](screenshots/03-pim-eligible.png)
+PIM, admins only get access when they request it
+![PIM](screenshots/03-pim-eligible.png)
 
-**Conditional Access: MFA required, legacy auth blocked**
-![Conditional Access policies](screenshots/04-conditional-access.png)
+Conditional Access policies
+![Conditional Access](screenshots/04-conditional-access.png)
 
-**Hidden Domain Admin found through a nested group**
-![AD hidden admin](screenshots/05-ad-hidden-admin.png)
+The hidden Domain Admin
+![Hidden admin](screenshots/05-ad-hidden-admin.png)
