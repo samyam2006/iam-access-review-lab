@@ -82,7 +82,7 @@ Write-Host "Checking $($users.Count) users..."
 foreach ($u in $users) {
     $upn = $u.UserPrincipalName.ToLower()
     if ($upn -like "labadmin@*") { continue }
-    $myGroups = @($memberships[$u.Id])
+    $myGroups = @($memberships[$u.Id] | Where-Object { $_ })   # drop empties so "no groups" counts as 0
 
     if ($upn -in $termUpns -and $u.AccountEnabled) {
         Add-Finding "JML-01" "Critical" $upn "Terminated per HR but account is still enabled" "Disable, remove groups, revoke sessions"
